@@ -21,10 +21,15 @@ cd api/python
 python setup.py install
 ```
 
-Note that if you plan to use this framework with OpenAI gym
-you should also install `gym` using `pip install gym`.
+Note that you should also install OpenAI Gym using `pip install gym`.
 
-Make sure that the environment has successfully installed by running `python test/simulator_test.py` from the [api/python](api/python) directory. You should be able to see an visualizer of the grid-world environment along with the agent's visual input. You should be able to see the agent explore the environment.
+Make sure that the environment has successfully installed by running `python test/simulator_test.py` from the [api/python](api/python) directory. You should be able to see a visualizer of the grid-world environment along with the agent's visual input. If run successfullly, you should see the agent navigating through the environment.
+
+## The NEL Environement
+The environment (also called Jelly Bean World) consists of a 2-D grid world that an agent (blue triangle) can navigate in. The world contains three types of items (will be picked up by the agent by stepping on them) -
+- `Jelly Beans` (<span style="color:blue">Blue</span>): Get `+20` reward by picking up a jelly bean.
+- `Tongs` (<span style="color:red">Red</span>): Do not get any reward by picking up a pair of tongs, but tongs can be used to pick up a diamond in the future. Once a pair of tongs is used to pick up a diamond, it is no longer empty and cannot be used anymore.
+- `Diamonds` (<span style="color:green">Green</span>): Get `+100` reward by picking up a diamond. The agent can only pick a diamond if it has an empty pair of tongs.
 
 ## Using the OpenAI Gym Interface
 
@@ -34,11 +39,8 @@ The action space consists of three actions:
   - `2`: Turn right.
 
 The observation space consists of a dictionary:
-  - `scent`: Vector with shape `[S]`, where `S` is the 
-    scent dimensionality.
-  - `vision`: Matrix with shape `[2R+1, 2R+1, V]`, 
-    where `R` is the vision range and `V` is the 
-    vision/color dimensionality.
+  - `scent`: Vector of shape `[3]`. Each component corresponds to the scent of an item.
+  - `vision`: Matrix with shape `[11, 11, 3]`. This is the RGB image that the agent sees.
   - `moved`: Binary value indicating whether the last 
     action resulted in the agent moving.
 

@@ -17,7 +17,7 @@ from .visualizer import MapVisualizer
 def make_config():
   # specify the item types
   items = []
-  items.append(Item("banana",    [0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [1, 0, 0, 0], [0, 0, 0, 0], False,
+  items.append(Item("diamond",    [0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0, 1, 0, 0], [0, 1, 0, 0], False,
             intensity_fn=IntensityFunction.CONSTANT, intensity_fn_args=[-5.3],
             interaction_fns=[
               [InteractionFunction.PIECEWISE_BOX, 10.0, 200.0, 0.0, -6.0],      # parameters for interaction between item 0 and item 0
@@ -25,7 +25,7 @@ def make_config():
               [InteractionFunction.PIECEWISE_BOX, 10.0, 200.0, 2.0, -100.0],    # parameters for interaction between item 0 and item 2
               [InteractionFunction.ZERO]                                        # parameters for interaction between item 0 and item 3
             ]))
-  items.append(Item("onion",     [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0, 1, 0, 0], [0, 0, 0, 0], False,
+  items.append(Item("tongs",     [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0, 0, 0, 0], [0, 0, 0, 0], False,
             intensity_fn=IntensityFunction.CONSTANT, intensity_fn_args=[-5.0],
             interaction_fns=[
               [InteractionFunction.PIECEWISE_BOX, 200.0, 0.0, -6.0, -6.0],      # parameters for interaction between item 1 and item 0
@@ -62,7 +62,11 @@ if modules_loaded:
   sim_config = make_config()
 
   # Create a reward function.
-  reward_fn = lambda prev_items, items: len(items) - len(prev_items)
+  def reward_fn(prev_items, items):
+      collected_items = items - prev_items
+      n_diamonds = collected_items[0]
+      n_jellybeans = collected_items[2]
+      return 20 * n_jellybeans + 100 * n_diamonds
 
   register(
       id='NEL-v0',
